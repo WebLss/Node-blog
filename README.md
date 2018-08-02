@@ -56,6 +56,8 @@ D:\Program Files\MongoDB\Server\3.4\bin>mongod --dbpath "D:\mongodb\data\db" 启
 另一个iTerm2窗口执行：mongo //MongoDB shell
 
 
+mongolass: https://github.com/WebLss/mongolass
+
 ->package.json
 小提示: npm i 是 npm install 的简写，建议使用 npm i。
 
@@ -114,12 +116,6 @@ npm install -g install-peerdepsinstall-peerdeps --dev eslint-config-airbnb
 复制代码注意啦，首次一定要是全局安装，全局安装，全部全局安装，重要的事情说山遍~初始化一下吧eslint --init
 复制代码根据自己的项目需求配置，我这里选择的标准是Airbnb标准。在use arrow keys的时候，有些是看不到箭头的移动，但是已经选择了，所以选择哪呢，就按上下键+enter就好，反正我的是看不见，也能选上。
 
-作者：yxjz
-链接：https://juejin.im/post/5a0cec2af265da430e4eb501
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
 
 
 Sublime Text 需要装两个插件：SublimeLinter + SublimeLinter-contrib-eslint
@@ -139,6 +135,7 @@ config-lite 是一个轻量的读取配置文件的模块。config-lite 会根�
 如果程序以 NODE_ENV=test node app 启动，则 config-lite 会依次降级查找 config/test.js、config/test.json、config/test.node、config/test.yml、config/test.yaml 并合并 default 配置; 如果程序以 NODE_ENV=production node app 启动，则 config-lite 会依次降级查找 config/production.js、config/production.json、config/production.node、config/production.yml、config/production.yaml 并合并 default 配置。
 config-lite 还支持冒泡查找配置，即从传入的路径开始，从该目录不断往上一级目录查找 config 目录，直到找到或者到达根目录为止。
 
+npm shrinkwrap 强制相应版本依赖
 
 
 mongodb:
@@ -147,6 +144,10 @@ brew services stop mongodb --停止
 brew services restart mongodb --重启
 或者
 mongod --config /usr/local/etc/mongod.conf --启动
+
+
+SET NODE_ENV =development
+
 
 use admin, db.shutdownServer() --关闭
 
