@@ -151,4 +151,11 @@ SET NODE_ENV =development
 
 use admin, db.shutdownServer() --关闭
 
+//在 Chrome 54-55、Firefox 49-50、IE 11、Edge 14、Safari 9-10、Node.js 6-7 和 PhantomJS 2.1.1 上通过测试。
+  Automated browser & CI test runs are available.
+https://www.lodashjs.com/  是一个一致性、模块化、高性能的 JavaScript 实用工具库。
+
+
+
+
 密码veeker  li152783?

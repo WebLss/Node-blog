@@ -8,3 +8,5 @@ coverage
 .DS_Store
 journal/
 /package-lock.json
+/views/dist/
+/public/dist/

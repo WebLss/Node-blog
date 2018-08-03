@@ -27,7 +27,7 @@ var config = {
   // 日志类配置
   log_dir: path.join(__dirname, 'logs')
 }
-if (process.env.NODE_ENV === 'test') {
-  config.db = 'mongodb://127.0.0.1:27017/NodeBlog_test'
+if (process.env.NODE_ENV === 'development') {
+  config.mongodb = 'mongodb://127.0.0.1:27017/NodeBlog_dev'
 }
 module.exports = config
