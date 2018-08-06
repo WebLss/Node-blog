@@ -39,6 +39,7 @@ if (config.mini_assets) {
 app.locals.config = config
 app.locals.Loader = Loader
 app.locals.assets = assets
+app.locals.proxy = proxyMiddleware.proxy
 
 routes(app) // 路由注册
 
