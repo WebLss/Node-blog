@@ -97,4 +97,4 @@ gulp.task('server', function () {
 })
 
 // 监听事件
-gulp.task('default', ['css', 'js', 'image', 'html', 'copy'])
+gulp.task('default', ['css', 'js', 'image', 'html', 'copy', 'server'])

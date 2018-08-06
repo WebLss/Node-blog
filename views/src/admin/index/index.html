@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>后台管理</title>
-    <bootstrapcss />
-    <css file="__ADMIN_CSS__/index.css" />
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="dist/admin/css/style.css"/>
 </head>
 <body>
 <!-- 顶部导航菜单开始 -->
 <div id="nav-top">
     <div class="nt-logo">
-        <a href="{:U('Admin/Index/index')}"></a>
-        <span>webBlog</span>
+        <a href=""></a>
+        <span>
+            <img src="<%= proxy('/public/dist') %>">
+        </span>
     </div>
     <ul class="nt-nav list-unstyled">
         <li class="ntn-li ntn-active">
@@ -46,15 +48,17 @@
 </div>
 <!-- 顶部导航菜单结束 -->
 
+
 <!-- 左侧导航菜单开始 -->
 <div id="nav-left">
     <!-- 内容管理开始 -->
     <div class="nl-con nl-show">
+
         <dl>
             <dt>
                 <span class="fa fa-th"></span>文章管理
             </dt>
-            <dd>
+            <dd class="menu-active" >
                 <a href="{:U('Admin/Article/add')}" target="right_content"></a>
                 <span class="fa fa-caret-right"></span>添加文章
                 <div class="nl-checked">
@@ -108,6 +112,9 @@
             </dd>
         </dl>
     </div>
+
+
+
     <!-- 内容管理结束 -->
 
     <!-- 留言评论开始 -->
@@ -248,10 +255,12 @@
 
 <!-- 右侧内容开始 -->
 <div id="content">
-    <iframe id="content-iframe" src=" " frameborder="0" width="100%" height="100%" name="right_content" scrolling="auto" frameborder="0" scrolling="no"></iframe>
+    <iframe id="content-iframe" src="/admin/welcome" frameborder="0" width="100%" height="100%" name="right_content" scrolling="auto" frameborder="0" scrolling="no"></iframe>
 </div>
+<%- partial('../../common/bootstrapJs') %>
 <!-- 右侧内容结束 -->
 <!--<bootstrapjs />
+
 <js file="__ADMIN_JS__/index.js" />-->
 <script>
 // 动态调整iframe的高度以适应不同高度的显示器

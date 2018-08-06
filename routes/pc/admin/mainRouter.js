@@ -16,4 +16,10 @@ router.get('/', function (req, res, next) {
   res.render(path.join(constant.view_dir, 'admin/index'))
 })
 
+/**
+ * 欢迎页
+ */
+router.get('/welcome', function (req, res, next) {
+  res.render(path.join(constant.view_dir, 'admin/index/welcome'))
+})
 module.exports = router

@@ -5,7 +5,6 @@
 var Constant = {
   view_dir: 'dist'
 }
-console.log(process.env.NODE_ENV)
 if (Object.is(process.env.NODE_ENV, 'development')) {
   console.log('view_dir')
   Constant.view_dir = 'src'

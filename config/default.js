@@ -1,7 +1,10 @@
 var path = require('path')
 var config = {
   // debug 为 true 时，用于本地调试
+  // debug 为 true 时，用于本地调试
   debug: true,
+
+  get mini_assets () { return !this.debug }, // 是否启用静态文件的合并压缩，详见视图中的Loader
   port: 3000,
   session: {
     secret: 'NodeBlog',
@@ -25,7 +28,10 @@ var config = {
     keepAliveInitialDelay: 300000
   },
   // 日志类配置
-  log_dir: path.join(__dirname, 'logs')
+  log_dir: path.join(__dirname, 'logs'),
+
+  // cdn host，如 http://cnodejs.qiniudn.com
+  site_static_host: '' // 静态文件存储域名
 }
 if (process.env.NODE_ENV === 'development') {
   config.mongodb = 'mongodb://127.0.0.1:27017/NodeBlog_dev'

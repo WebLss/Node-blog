@@ -155,6 +155,21 @@ use admin, db.shutdownServer() --关闭
   Automated browser & CI test runs are available.
 https://www.lodashjs.com/  是一个一致性、模块化、高性能的 JavaScript 实用工具库。
 
+https://www.npmjs.com/package/loader
+上文没有提及的重要值是assetsMap，这个值需要通过构建产生，类似如下格式：
+
+{
+  "/assets/index.min.js":"/assets/index.min.ecf8427e.js",
+  "/assets/index.min.css":"/assets/index.min.f2fdeab1.css"
+}
+如果需要线上执行，需要该对象的传入。而该对象需要通过以下构建脚本（loader-builder）来生成：
+
+$ builder <views_dir> <output_dir>
+$ # 或者
+$ ./node_modules/loader-builder/bin/builder <views_dir> <output_dir>
+以上脚本将会遍历视图目录中寻找Loader().js().css().done()这样的标记，然后得到合并文件与实际文件的关系。
+如以上的assets/index.min.js文件并不一定需要真正存在，进行扫描构建后，会将相关的js文件进行编译和合并为一个文件。
+并且根据文件内容进行md5取hash值，最终生成/assets/index.min.ecf8427e.js这样的文件。
 
 
 
