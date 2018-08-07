@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加标签</title>
+    <%- partial('../../common/bootstrapCss') %>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="border-bottom: 1px solid #cccccc">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1">
+            <form action="/admin/tag/add" method="post">
+                <fieldset>
+
+                    <label contenteditable="true">表签名</label>
+                    <textarea class="form-control modal-sm" name="tnames" rows="5" placeholder="可以批量添加标签，每行一个。"></textarea>
+                    <!--<span class="help-block" contenteditable="true">这里填写帮助信息.</span>-->
+                    <button class="btn" contenteditable="true" type="submit">确认添加</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- partial('../../common/bootstrapJs') %>
+</body>
+</html>
