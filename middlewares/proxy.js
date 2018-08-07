@@ -12,9 +12,12 @@ var omit = function (obj, arr) {
       delete obj[item]
     }
   })
+  return obj
 }
 
 exports.proxy = function (req, res, next) {
+  console.log('dddd', req)
+  /* console.log(req.query)
   var url = decodeURIComponent(req.query.url)
   var hostname = urllib.parse(url).hostname
 
@@ -24,7 +27,7 @@ exports.proxy = function (req, res, next) {
 
   request.get({
     url: url,
-    headers: this.omit(req.headers, ['cookie', 'refer'])
+    headers: omit(req.headers, ['cookie', 'refer'])
   })
     .on('response', function (response) {
       res.set(response.headers)
@@ -32,5 +35,5 @@ exports.proxy = function (req, res, next) {
     .on('error', function (err) {
       logger.error(err)
     })
-    .pipe(res)
+    .pipe(res) */
 }

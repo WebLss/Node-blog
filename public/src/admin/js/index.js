@@ -12,7 +12,11 @@ $(function () {
 
   // 左侧导航点击增加样式
   $('#nav-left .nl-con dd').click(function (event) {
+    $('#nav-left .nl-con dd').removeClass('menu-active')
     $('.nl-checked').hide()
+    /* $('.menu-active').hide()
+    $(this).find('.menu-active').show() */
+    $(this).addClass('menu-active')
     $(this).find('.nl-checked').show()
   })
 })

@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <title>后台管理</title>
     <%- partial('../../common/bootstrapCss') %>
-    <link rel="stylesheet" type="text/css" href="dist/admin/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>style.css"/>
 </head>
 <body>
 <!-- 顶部导航菜单开始 -->
 <div id="nav-top">
     <div class="nt-logo">
-        <a href=""></a>
         <span>
-            <img src="<%= proxy('/public/dist') %>">
+           <a href=""> <img src="<%= proxy(static.__COMMON_IMG__+'logo.png') %>">  </a>
         </span>
     </div>
     <ul class="nt-nav list-unstyled">
@@ -58,7 +57,7 @@
             <dt>
                 <span class="fa fa-th"></span>文章管理
             </dt>
-            <dd class="menu-active" >
+            <dd>
                 <a href="{:U('Admin/Article/add')}" target="right_content"></a>
                 <span class="fa fa-caret-right"></span>添加文章
                 <div class="nl-checked">
@@ -260,8 +259,8 @@
 <%- partial('../../common/bootstrapJs') %>
 <!-- 右侧内容结束 -->
 <!--<bootstrapjs />
-
 <js file="__ADMIN_JS__/index.js" />-->
+<script type="application/javascript"  src="<%=static.__ADMIN_JS__%>index.js"></script>
 <script>
 // 动态调整iframe的高度以适应不同高度的显示器
 $('#content').height($(window).height());

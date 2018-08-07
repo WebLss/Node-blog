@@ -6,10 +6,24 @@ $font-size: 12px !default;
 $font-color: #5f5f5f;
 $left-width: 230px;
 $font-family: "Monospaced Number","Chinese Quote",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
-
-html{
+$color-blue: #1890ff;
+html {
   overflow-y: hidden;
   font-family: $font-family;
+}
+a {
+  color: $font-color;
+  &:hover{
+    color: $color-blue;
+    text-decoration:none
+  }
+}
+%active {
+  font-size: $font-size+2;
+  color: $color-blue;
+  -webkit-transition: all .3s cubic-bezier(0, 0, 0, 0.48); /* 缓慢变色效果 */
+  -moz-transition: all .3s ease;
+  transition: all .3s ease;
 }
 %nav-wrap {
   height: $nav-height;
@@ -33,17 +47,13 @@ html{
   .nt-logo{
     width: $left-width;
     text-align: center;
-    font-size: 30px;
-    font-weight: 700;
     float: left;
     position: relative;
-    a{
-      display: block;
-      width: 190px;
-      position: absolute;
-      left: 0;
-      top: 0;
+    img {
+      width: 100%;
+
     }
+
   }
   .nt-nav{
     padding: 0 2px;
@@ -58,52 +68,44 @@ html{
       cursor: pointer;
       font-size: $font-size+2;
       float: left;
-      .nt-ico{
+      .nt-ico {
         font-size: 20px;
+      }
+      &:hover {
+        border-top: 2px solid $color-blue;
+        @extend %active
       }
     }
     .ntn-active{
-      border-top: 2px solid #1890ff;
-      border-bottom: 2px solid transparent;
+      border-top: 2px solid $color-blue;
+      @extend %active
     }
   }
   .nt-msg{
     padding-right: 20px;
     width: 220px;
-    height: 50px;
+    height: $nav-height;
     float: right;
     li{
       width: 100px;
-      height: 50px;
-      line-height: 50px;
+      height: $nav-height;
+      line-height: $nav-line-height;
       text-align: center;
-      background: #2E8965;
       float: left;
-      a{
-        display: block;
-        width: 100px;
-        height: 50px;
-        line-height: 50px;
-        font-size: 15px;
-        color: #333;
-      }
     }
     .nt-sign-out{
-      background: #892E65;
+
     }
   }
 }
 /* 顶部导航条结束 */
 
 %main-content {
-  margin-top: 20px;
+  top: 90px;
 }
 %menu-active {
   background: #E6F7FF;
-  color: #1890ff;
-  -webkit-transition: all .2s cubic-bezier(0, 0, 0, 0.48); /* 缓慢变色效果 */
-  -moz-transition: all .2s ease;
-  transition: all .2s ease;
+  @extend %active
 }
 /* 左侧导航开始 */
 #nav-left{
@@ -164,16 +166,17 @@ html{
         .nl-checked{
           width: 2px;
           height: 40px;
-          background: #438EB9;
+          background: $color-blue;
           display: none;
           position: absolute;
           right: -1px;
           top: 0;
+          @extend %menu-active;
           .nl-arrows{
             width: 0;
             height: 0;
             border: 16px solid transparent;
-            border-right-color: #438EB9;
+            border-right-color: $color-blue;
             position: absolute;
             left: -30px;
             top: 3px;
@@ -196,7 +199,10 @@ html{
 /* 右侧内容区域开始 */
 #content{
   @extend %main-content;
-  padding: 10px 0px 0px 200px;
+  position: absolute;
+  bottom: 0;
+  left: $left_width+5;
+  right: 0;
   width: 100%;
   height: 590px;
   overflow-y: hidden;
