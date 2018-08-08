@@ -3,6 +3,7 @@ const path = require('path')
 const constant = require('../../../common/constant')
 const router = express.Router()
 const tagModel = require('../../../models/tagModel')
+const Tools = require('../../../common/tools')
 /**
  *  添加标签页
  */
@@ -14,7 +15,15 @@ router.get('/add', function (req, res, next) {
 })
 
 router.post('/add', function (req, res, next) {
-  console.log(req.body);
+  var msg = ''
+  /* try {
+    var result = tagModel.addTag(req.body.tnames)
+    if (result) { msg = '标签添加成功' }
+  } catch (e) {
+    msg = e.message
+  } */
+
+  res.render(path.join(constant.view_dir, '/admin/tag/add'), {message: Tools.Msg('error', '程度上激发')})
 })
 
 module.exports = router

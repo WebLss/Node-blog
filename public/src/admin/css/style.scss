@@ -1,12 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
-$nav-height: 64px;
-$nav-line-height: 60px;
-$font-size: 12px !default;
-$font-color: #5f5f5f;
-$left-width: 230px;
-$font-family: "Monospaced Number","Chinese Quote",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
-$color-blue: #1890ff;
+@import 'base';
 html {
   overflow-y: hidden;
   font-family: $font-family;
@@ -21,9 +15,7 @@ a {
 %active {
   font-size: $font-size+2;
   color: $color-blue;
-  -webkit-transition: all .3s cubic-bezier(0, 0, 0, 0.48); /* 缓慢变色效果 */
-  -moz-transition: all .3s ease;
-  transition: all .3s ease;
+  @extend %webkit-transition
 }
 %nav-wrap {
   height: $nav-height;

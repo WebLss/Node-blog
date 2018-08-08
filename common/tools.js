@@ -25,3 +25,11 @@ exports.hash = function (str, callback) {
 exports.compare = function (str, hash, callback) {
   bcrypt.compare(str, hash).then(callback)
 }
+// 用于检查字符串是否为空、null或未定义的I:
+exports.isEmpty = function (str) {
+  return (!str || (str.length === 0))
+}
+// 消息提示样式转换
+exports.Msg = function (type, message) {
+  return {type: type, message: message}
+}
