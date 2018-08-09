@@ -3,28 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <title>标签列表</title>
-    <bootstrapcss />
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
 </head>
 <body>
-<table class="table table-bordered table-striped table-hover table-condensed">
-    <thead>
-        <tr>
-            <th>tid</th>
-            <th>标签名</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <foreach name="data" item="v">
-        <tr>
-            <td>{$v['tid']}</td>
-            <td>{$v['tname']}</td>
-            <td>
-                <a href="{:U('Admin/Tag/edit',array('tid'=>$v['tid']))}">修改</a> | 
-                <a href="javascript:if(confirm('确定要删除吗?')) location='{:U('Admin/Tag/delete',array('tid'=>$v['tid']))}'">删除</a>
-            </td>
-        </tr>
-    </foreach>
-</table>
-<bootstrapjs />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="tag">
+                <b>标签管理</b> / 标签列表
+            </span>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1">
+            <table class="table table-bordered table-striped table-hover table-condensed margin-top-1">
+                <thead>
+                <tr>
+                    <th>ObjectId</th>
+                    <th>标签名</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="showTag">
+
+                </tbody>
+                    <!--<tr>
+                        <td>{$v['tid']}</td>
+                        <td>{$v['tname']}</td>
+                        <td>
+                            <a href="{:U('Admin/Tag/edit',array('tid'=>$v['tid']))}">修改</a> |
+                            <a href="javascript:if(confirm('确定要删除吗?')) location='{:U('Admin/Tag/delete',array('tid'=>$v['tid']))}'">删除</a>
+                        </td>
+                    </tr>-->
+            </table>
+            <div class="text-center margin-top-1">
+                <ul class="pagination jq-pagination" id="pagination"> </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<%- partial('../../common/bootstrapJs') %>
+<script type="application/javascript" src="<%=static.__STATIC_JS__%>jqpaginator.min.js"></script>
+<script>
+  $('#pagination').jqPaginator({
+    totalPages: 100,
+    visiblePages: 10,
+    currentPage: 1,
+    onPageChange: function (num, type) {
+      //$('#text').html('当前第' + num + '页');
+      search(num)
+    }
+  });
+  function search(pageIndex) {
+    $.ajax({
+      url: '/admin/tag/getTags?page='+pageIndex+'&rows=3',
+      data: {name: 'ddd'},
+      type : "get",
+      dataType : "json",
+      success : function(datas) {
+        if(datas.code === 200) {
+           var fragment = document.createDocumentFragment();
+           var data = datas.datas
+           data.records.forEach(function (item) {
+             var trEl = document.createElement('tr');
+             trEl.innerHTML = '<td>'+item._id+ '</td><td>'+item.name+'</td><td>';
+             fragment.appendChild(trEl);
+           })
+           $('#showTag').html('');
+           document.getElementById('showTag').appendChild(fragment);
+           $('#pagination').jqPaginator('option', {
+             currentPage: data.currentPage,
+             visiblePages: data.totalPages,
+             totalCounts: data.totalCounts,
+             pageSize: data.pageSize
+           });
+        }
+      },
+      error: function (err) {
+        console.log(err)
+      }
+
+    })
+  }
+
+</script>
 </body>
 </html>

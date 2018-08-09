@@ -2,6 +2,7 @@
  *  Created by WebLss on 2018/8/3
  *  常量
  */
+const Path = require('path')
 var envDir = Object.is(process.env.NODE_ENV, 'development') ? 'src' : 'dist'
 var Constant = {
   view_dir: envDir,
@@ -14,7 +15,11 @@ var Constant = {
     __HOME_IMG__: '/public/dist/home/image/',
     __COMMON_JS__: '/public/dist/common/js/',
     __COMMON_CSS__: '/public/dist/common/css/',
-    __COMMON_IMG__: '/public/dist/common/image/'
+    __COMMON_IMG__: '/public/dist/common/image/',
+    __STATIC_JS__: '/public/static/js/'
+  },
+  router: function (module,route) { // 路由组装
+    return Path.join(envDir, Path.join(module, route))
   }
 
 }
