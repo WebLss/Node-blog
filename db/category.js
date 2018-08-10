@@ -7,7 +7,7 @@ var CategorySchema = new Schema({
   cname: { type: 'string', required: true },
   keywords: { type: String },
   description: { type: String },
-  sort: { type: Number },
+  sort: { type: Number, default: 0 },
   parent_id: { type: Schema.Types.ObjectId },
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now }

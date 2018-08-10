@@ -79,7 +79,7 @@
   border-radius: 4px;
 }
 
-.pagination {
+%pagination {
   z-index: 3;
   color: #fff;
   cursor: default;
@@ -88,9 +88,9 @@
   box-shadow: 2px 4px 10px $color-shadow !important;
 }
 .pagination > .active > span , .pagination > .active > a {
-  @extend .pagination;
+  @extend %pagination;
 
   &:hover, &:focus {
-    @extend .pagination;
+    @extend %pagination;
   }
 }

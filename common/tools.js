@@ -33,3 +33,16 @@ exports.isEmpty = function (str) {
 exports.Msg = function (type, message) {
   return {type: type, message: message}
 }
+/**
+ * 浅层拷贝对象值,即拷贝第二个对象的值给第一对象
+ */
+exports.copyObj = function (one, two) {
+  if ((typeof one === 'object') && (typeof two === 'object')) {
+    for (var item in one) {
+      one[item] = two[item] || null
+    }
+    return one
+  } else {
+    throw new Error('不是对象')
+  }
+}

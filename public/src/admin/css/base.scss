@@ -17,3 +17,10 @@ $info-color: #91d5ff;
   transition: all .3s ease;
 }
 
+a {
+  color: $color-blue;
+  line-height: normal;
+  &:hover {
+    color: rgba(24,144,255,0.8);
+  }
+}

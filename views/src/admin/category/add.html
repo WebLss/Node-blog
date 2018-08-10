@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加标签</title>
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="tag">
+                <b>分类管理</b> / 添加分类
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1">
+            <form id="addCategory" class="form-wrap">
+                <table class="table">
+                    <tr>
+                        <th>分类名</th>
+                        <td><input class="form-control modal-sm" type="text" name="cname" ></td>
+                    </tr>
+                    <tr>
+                        <th>所属栏目</th>
+                        <td>
+                            <select class="form-control modal-sm" name="pid">
+                                <option value="0">顶级栏目</option>
+                               <!-- <foreach name="data" key="k" item="v">
+                                    <option value="{$v['cid']}" <if condition="$cid eq $v['cid']">selected="selected"</if> >{$v['_name']}</option>
+                                </foreach>-->
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>排序</th>
+                        <td><input class="form-control modal-sm" type="text" name="sort" ></td>
+                    </tr>
+                    <tr>
+                        <th>关键词</th>
+                        <td><input class="form-control modal-sm" type="text" name="keywords" ></td>
+                    </tr>
+                    <tr>
+                        <th>描述</th>
+                        <td>
+                            <textarea class="form-control modal-sm" name="description"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="btn lss-btn-primary" type="button" value="确认添加" onclick="sub()">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- partial('../../common/bootstrapJs') %>
+<script>
+  function sub() {
+    $.ajax({
+      url: '/admin/category/add',
+      dataType: 'json',
+      type: 'post',
+      data: $('#addCategory').serialize(),
+      success: function (result) {
+        if(result.code === 200) {
+          layer.msg(result.message, {icon: 1, time: 1500});
+        } else {
+          layer.msg(result.message, {icon: 2, time: 1500});
+        }
+      }, error: function (err) {
+        layer.msg(err.message, {icon: 2, time: 1500});
+      }
+    })
+  }
+</script>
+</body>
+</html>

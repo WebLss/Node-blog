@@ -5,7 +5,7 @@ var async = require('async')
 const Page = require('../plugin/paginate')
 // var page = new Page(currentPage, pageSize, result.length)
 var TagModel = {
-  createAndUpdate: function (name, callback) {
+  create: function (name, callback) {
     var tag = new TagDb()
     tag.name = name
     tag.save(callback)
@@ -22,9 +22,22 @@ var TagModel = {
     } else {
       _.forEach(_.filter(str.split('\r\n'), function (value) { return !Tools.isEmpty(value) })
         , function (tName) {
-          TagModel.createAndUpdate(tName)
+          TagModel.create(tName)
         })
       return true
+    }
+  },
+  /**
+   * 编辑标签
+   * @param obj {id, name}
+   */
+  editTag: function (obj) {
+    if (obj.hasOwnProperty('id') && Tools.isEmpty(obj.id)) {
+      throw new Error('标签id不能留空')
+    } else if (obj.hasOwnProperty('name') && Tools.isEmpty(obj.name)){
+      throw new Error('标签名称不能留空')
+    } else {
+      return TagDb.updateOne({_id: obj.id}, {$set: {name: obj.name}}).exec()
     }
   },
   /**
@@ -48,6 +61,9 @@ var TagModel = {
       var page = new Page(currentPage, pageSize, results.count)
       callback(err, _.assignIn(page, {records: results.records}))
     })
+  },
+  findById: function (objectId) {
+    return TagDb.findById(objectId).exec()
   }
 }
 

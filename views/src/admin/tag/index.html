@@ -70,7 +70,7 @@
            var data = datas.datas
            data.records.forEach(function (item) {
              var trEl = document.createElement('tr');
-             trEl.innerHTML = '<td>'+item._id+ '</td><td>'+item.name+'</td><td>';
+             trEl.innerHTML = '<td>'+item._id+ '</td><td>'+item.name+'</td><a href="/admin/tag/edit?id='+item._id+'">编辑</a><td>';
              fragment.appendChild(trEl);
            })
            $('#showTag').html('');
@@ -79,7 +79,12 @@
              currentPage: data.currentPage,
              visiblePages: data.totalPages,
              totalCounts: data.totalCounts,
-             pageSize: data.pageSize
+             pageSize: data.pageSize,
+             prev: '<li class="prev"><a href="javascript:;">上一页</a></li>',
+             next: '<li class="next"><a href="javascript:;">下一页</a></li>',
+             page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+             first: '<li class="first"><a href="javascript:;">首页</a></li>',
+             last: '<li class="last"><a href="javascript:;">尾页</a></li>'
            });
         }
       },

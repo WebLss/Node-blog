@@ -50,4 +50,27 @@ router.post('/add', function (req, res, next) {
   res.render(Constant.router('admin', 'tag/add'), {message: msg})
 })
 
+router.get('/edit', function (req, res, next) {
+  var _id = req.query.id || ''
+  if (_id) {
+    tagModel.findById(_id).then(function (result) {
+      res.render(Constant.router('admin', 'tag/edit'), result)
+    }, function (err) {
+      res.json({error: err.message})
+    })
+  }
+})
+router.post('/edit', function (req, res, next) {
+  try {
+    tagModel.editTag({id: req.body.id, name: req.body.tnames})
+      .then(function () {
+        res.json(new Rs(200, '修改标签成功'))
+      }, function (err) {
+        res.json(new Rs(300, err.message))
+      })
+  } catch (e) {
+    res.json(new Rs(405, e.message))
+  }
+})
+
 module.exports = router

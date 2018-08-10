@@ -3,26 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>添加标签</title>
-    <bootstrapcss />
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
 </head>
 <body>
-<form action="{:U('Admin/Tag/edit')}" method="post">
-    <table class="table table-bordered table-striped table-hover table-condensed">
-        <input type="hidden" name="tid" value="{$data['tid']}">
-        <tr>
-            <th>标签名</th>
-            <td>
-                <input class="form-control modal-sm" type="text" name="tname" value="{$data['tname']}">
-            </td>
-        </tr>
-        <tr>
-            <th></th>
-            <td>
-                <input class="btn btn-success" type="submit" value="修改">
-            </td>
-        </tr>
-    </table>
-</form>
-<bootstrapjs />
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="tag">
+                <b>标签管理</b> / 编辑标签
+            </span>
+        </div>
+    </div>
+    <div class="row margin-top-2">
+        <div class="col-md-12">
+            <span class="tag">
+                <a href="javascript:history.go(-1)">返回</a>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1">
+            <form id="editTag" class="form-wrap">
+                <fieldset>
+
+                    <label class="margin-top-1">标签名</label>
+                    <textarea class="form-control modal-sm margin-top-1" name="tnames" rows="5" placeholder="可以批量添加标签，每行一个。"><%=name%></textarea>
+                    <!--<span class="help-block" contenteditable="true">这里填写帮助信息.</span>-->
+                    <input type="hidden" value="<%=_id%>" name="id">
+                    <button type="button" class="btn lss-btn-primary margin-top-1"  onclick="sub()" >确认修改</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- partial('../../common/bootstrapJs') %>
+<script>
+   function sub() {
+     $.ajax({
+       url: '/admin/tag/edit',
+       dataType: 'json',
+       type: 'post',
+       data: $('#editTag').serialize(),
+       success: function (result) {
+         if(result.code === 200) {
+           layer.msg(result.message, {icon: 1, time: 1500});
+         } else {
+           layer.msg(result.message, {icon: 2, time: 1500});
+         }
+       }, error: function (err) {
+         layer.msg(err.message, {icon: 2, time: 1500});
+       }
+     })
+   }
+</script>
 </body>
 </html>
