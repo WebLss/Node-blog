@@ -6,14 +6,22 @@ const Page = require('../plugin/paginate')
 // var page = new Page(currentPage, pageSize, result.length)
 var CategoryModel = {
   create: function (obj, callback) {
-    var category = new CategoryDb()
-    // console.log(Tools.copyObj(category, obj))
-    category.cname = 'xiao'
-    return category.save(callback)
+    CategoryDb.findOne({cname: obj.cname}).exec()
+      .then(function (result) {
+        if (result) {
+          var msg = '分类名称已存在'
+          callback(msg, null)
+        } else {
+          CategoryDb.create(obj, callback)
+        }
+      }, function (err) {
+        callback(err.message, null)
+      })
   },
   /**
    * 添加分类
    * @param obj 分类对象
+   * @param callback
    */
   addCategory: function (obj, callback) {
     if (!Tools.isEmpty(obj.pid)) {
@@ -28,7 +36,8 @@ var CategoryModel = {
         obj.sort = parseInt(obj.sort)
       }
     }
-    return CategoryModel.create(obj, callback)
+    obj.cname = obj.cname.trim()
+    CategoryModel.create(obj, callback)
   },
   /**
    * 编辑分类

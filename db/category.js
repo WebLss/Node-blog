@@ -8,7 +8,7 @@ var CategorySchema = new Schema({
   keywords: { type: String },
   description: { type: String },
   sort: { type: Number, default: 0 },
-  parent_id: { type: Schema.Types.ObjectId },
+  parent_id: { type: String, default: '0'},
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now }
 })

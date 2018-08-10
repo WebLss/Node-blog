@@ -28,7 +28,7 @@ router.post('/add', function (req, res, next) {
     console.log(req.body)
     categoryModel.addCategory(req.body, function (err, result) {
       if (err) {
-        res.json(new Rs(300, err.message))
+        res.json(new Rs(300, err))
       } else {
         res.json(new Rs(200, '添加分类成功'))
       }

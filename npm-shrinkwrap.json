@@ -4000,6 +4000,14 @@
       "integrity": "sha1-HIaZHYFq0eUEdQ5zh0Ik7PO+xQg=",
       "dev": true
     },
+    "eventproxy": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/eventproxy/-/eventproxy-1.0.0.tgz",
+      "integrity": "sha512-GKeEWUQxGNGtSiX6cLI6cWcTYPIsq3JoxNgnTTJXH1gSMLxLU/IuUH2OzxmhFoXVQl1eYh0ukrqL32ygnpJnpQ==",
+      "requires": {
+        "debug": "^2.6.8"
+      }
+    },
     "exec-buffer": {
       "version": "3.2.0",
       "resolved": "https://registry.npmjs.org/exec-buffer/-/exec-buffer-3.2.0.tgz",
