@@ -11,17 +11,24 @@
     <div class="row">
         <div class="col-md-12">
             <span class="tag">
-                <b>分类管理</b> / 添加分类
+                <b>分类管理</b> / 编辑分类
+            </span>
+        </div>
+    </div>
+    <div class="row margin-top-2">
+        <div class="col-md-12">
+            <span class="tag">
+                <a href="javascript:history.go(-1)">返回</a>
             </span>
         </div>
     </div>
     <div class="row margin-top-1">
         <div class="col-md-4 col-md-offset-1">
-            <form id="addCategory" class="form-wrap">
+            <form id="editCategory" class="form-wrap">
                 <table class="table">
                     <tr>
                         <th>分类名</th>
-                        <td><input class="form-control modal-sm" type="text" name="cname" ></td>
+                        <td><input class="form-control modal-sm" type="text" name="cname"  value="<%=category.cname%>"></td>
                     </tr>
                     <tr>
                         <th>所属栏目</th>
@@ -41,22 +48,23 @@
                     </tr>
                     <tr>
                         <th>排序</th>
-                        <td><input class="form-control modal-sm" type="text" name="sort" ></td>
+                        <td><input class="form-control modal-sm" type="text" name="sort" value="<%=category.sort%>"></td>
                     </tr>
                     <tr>
                         <th>关键词</th>
-                        <td><input class="form-control modal-sm" type="text" name="keywords" ></td>
+                        <td><input class="form-control modal-sm" type="text" name="keywords" value="<%=category.keywords%>"></td>
                     </tr>
                     <tr>
                         <th>描述</th>
                         <td>
-                            <textarea class="form-control modal-sm" name="description"></textarea>
+                            <textarea class="form-control modal-sm" name="description"><%=category.description%></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th></th>
                         <td>
-                            <input class="btn lss-btn-primary" type="button" value="确认添加" onclick="sub()">
+                            <input type="hidden" value="<%=category._id%>" name="id">
+                            <input class="btn lss-btn-primary" type="button" value="确认修改" onclick="sub()">
                         </td>
                     </tr>
                 </table>
@@ -69,10 +77,10 @@
 <script>
   function sub() {
     $.ajax({
-      url: '/admin/category/add',
+      url: '/admin/category/edit',
       dataType: 'json',
       type: 'post',
-      data: $('#addCategory').serialize(),
+      data: $('#editCategory').serialize(),
       success: function (result) {
         if(result.code === 200) {
           layer.msg(result.message, {icon: 1, time: 1500});

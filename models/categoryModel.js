@@ -1,9 +1,6 @@
 var CategoryDb = require('../db').Category
 var Tools = require('../common/tools')
 var _ = require('lodash')
-var async = require('async')
-const Page = require('../plugin/paginate')
-// var page = new Page(currentPage, pageSize, result.length)
 var CategoryModel = {
   create: function (obj, callback) {
     CategoryDb.findOne({cname: obj.cname}).exec()
@@ -40,10 +37,30 @@ var CategoryModel = {
     CategoryModel.create(obj, callback)
   },
   /**
+   * 获取所有数据
+   */
+  getAllData: function () {
+    return CategoryDb.find().exec()
+  },
+  /**
    * 编辑分类
    * @param obj {id, name}
    */
-  editTag: function (obj) {
+  editCategory: function (obj) {
+    if (!Tools.isEmpty(obj.pid)) {
+      obj = _.assignIn(obj, {parent_id: obj.pid})
+      delete obj.pid
+    }
+    if (Tools.isEmpty(obj.cname)) {
+      throw new Error('分类名称不能为空')
+    }
+    if (!Tools.isEmpty(obj.sort)) {
+      if (!_.isNumber(obj.sort)) {
+        obj.sort = parseInt(obj.sort)
+      }
+    }
+    obj.cname = obj.cname.trim()
+
   },
   findById: function (objectId) {
     return CategoryDb.findById(objectId).exec()
