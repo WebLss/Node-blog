@@ -60,7 +60,7 @@ var CategoryModel = {
       }
     }
     obj.cname = obj.cname.trim()
-
+    return CategoryDb.where({_id: obj.id}).update({$set: obj}).exec()
   },
   findById: function (objectId) {
     return CategoryDb.findById(objectId).exec()

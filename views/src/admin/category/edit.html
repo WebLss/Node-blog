@@ -34,9 +34,10 @@
                         <th>所属栏目</th>
                         <td>
                             <select class="form-control modal-sm" name="pid">
+
                                 <option value="0">顶级栏目</option>
                                 <%  result.forEach(function (item) { %>
-                                    <option value="<%=item._id%>" <% if(item._id==item.parent_id){ %>selected="selected" <% } %> >
+                                    <option value="<%=item._id%>" <% if(item._id.toString() == category._id){ %> selected="selected" <% } %>>
                                        <%=item.html%><%=item.cname%>
                                     </option>
                                 <% }) %>

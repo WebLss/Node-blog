@@ -32,11 +32,11 @@ var toTreeArray = function (data, html, pid, level) {
       item.parent_id = '0'
     }
     if (item.parent_id == pid) {
+      console.log('==', item.parent_id)
       item.levels = level + 1
       item.html = repeat(html, level)
-
       temp.push(item)
-      temp = temp.concat(toTreeArray(data, html, item._id, item.levels))
+      temp = temp.concat(toTreeArray(data, html, item._id.toString(), item.levels))
     }
   })
   return temp
@@ -46,7 +46,7 @@ var toTreeArray = function (data, html, pid, level) {
  */
 router.get('/', function (req, res, next) {
   categoryModel.getAllData().then(function (data) {
-    toTreeArray(data)
+    data = toTreeArray(data)
     res.render(Constant.router('admin', 'category/index'), {result: data || []})
   }, function (err) {
     res.json(new Rs(405, err.message))
@@ -57,8 +57,7 @@ router.get('/', function (req, res, next) {
  */
 router.get('/add', function (req, res, next) {
   categoryModel.getAllData().then(function (data) {
-    toTreeArray(data)
-    res.render(Constant.router('admin', 'category/add'), {result: data || []})
+    res.render(Constant.router('admin', 'category/add'), {result: toTreeArray(data) || []})
   }, function (err) {
     res.json(new Rs(405, err.message))
   })
@@ -89,8 +88,7 @@ router.get('/edit', function (req, res, next) {
   var proxy = new ProxyEvent()
   proxy.all(['getCateList', 'getById'], function (getCateList, getById) {
     if (getCateList && getById) {
-      toTreeArray(getCateList)
-      res.render(Constant.router('admin', 'category/edit'), {result: getCateList, category: getById})
+      res.render(Constant.router('admin', 'category/edit'), {result: toTreeArray(getCateList), category: getById})
     } else {
       res.json(new Rs(300, '数据获取异常'))
     }
@@ -114,6 +112,15 @@ router.get('/edit', function (req, res, next) {
  * 修改分类处理
  */
 router.post('/edit', function (req, res, next) {
+  try {
+    categoryModel.editCategory(req.body).then(function (result) {
+      res.json(new Rs(200, '修改分类成功'))
+    }, function (err) {
+      res.json(new Rs(300, err.message))
+    })
+  } catch (e) {
+    res.json(new Rs(405, e))
+  }
 
 })
 

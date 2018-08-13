@@ -17,7 +17,7 @@
     </div>
 
 
-    <div class="row margin-top-1">
+    <div class="row margin-top-1 animated  fadeIn">
         <div class="col-md-4 col-md-offset-1">
 
             <table class="table table-striped table-hover table-condensed margin-top-1 table-wrap">
@@ -50,5 +50,10 @@
     </div>
 </div>
 <%- partial('../../common/bootstrapJs') %>
+<script>
+  //加载层
+
+  layer.load(0, { shade: [0.4,'#fff'], time: 500}); //0代表加载的风格，支持0-2
+</script>
 </body>
 </html>

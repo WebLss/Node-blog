@@ -34,7 +34,7 @@ var TagModel = {
   editTag: function (obj) {
     if (obj.hasOwnProperty('id') && Tools.isEmpty(obj.id)) {
       throw new Error('标签id不能留空')
-    } else if (obj.hasOwnProperty('name') && Tools.isEmpty(obj.name)){
+    } else if (obj.hasOwnProperty('name') && Tools.isEmpty(obj.name)) {
       throw new Error('标签名称不能留空')
     } else {
       return TagDb.updateOne({_id: obj.id}, {$set: {name: obj.name}}).exec()
@@ -51,11 +51,11 @@ var TagModel = {
     var start = (currentPage - 1) * pageSize
     async.parallel({
       count: function (done) { // 查询数量
-        TagDb.countDocuments(option, function (err, count) { done(err, count) })
+        TagDb.countDocuments(option, done)
       },
       records: function (done) { // 查询一页的记录
         TagDb.find(option).limit(pageSize).skip(start || 0)
-          .exec(function (err, list) { done(err, list) })
+          .exec(done)
       }
     }, function (err, results) {
       var page = new Page(currentPage, pageSize, results.count)
@@ -64,6 +64,18 @@ var TagModel = {
   },
   findById: function (objectId) {
     return TagDb.findById(objectId).exec()
+  },
+  /**
+   * 获取标签所有字段及对应字段中所关联的文章个数
+   */
+  getAllData: function () {
+    var promise = new Promise(function (resolve, reject) {
+      TagDb.find().exec(function (err, data) {
+        if (err) reject(err)
+        else resolve(data)
+      })
+    })
+    return promise
   }
 }
 

@@ -1,0 +1,34 @@
+
+<% var define = color || 'blue'  %>
+<%- Loader('/public/dist/common/js/icheck.min.js')
+.js('/public/static/iCheck-1.0.2/icheck.min.js')
+.done(assets, config.site_static_host, config.mini_assets)
+%>
+<script>
+  $(document).ready(function(){
+    $('.icheck').iCheck({
+      checkboxClass: "icheckbox_square-<%=define%>",
+      radioClass: "iradio_square-<%=define%>",
+      increaseArea: "20%"
+    });
+  });
+</script>
+
+<!-- 百度页面自动提交开始 -->
+<!--<script>
+  (function(){
+
+    /*百度请求*/
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>-->
+<!-- 百度页面自动提交结束 -->
