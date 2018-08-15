@@ -1,16 +1,5 @@
-/*!
- * nodeclub - common/render_helpers.js
- * Copyright(c) 2013 fengmk2 <fengmk2@gmail.com>
- * MIT Licensed
- */
-
-'use strict'
-
-/**
- * Module dependencies.
- */
-
 var MarkdownIt = require('markdown-it')
+var _ = require('lodash')
 var config = require('../config/default')
 var validator = require('validator')
 var jsxss = require('xss')
@@ -58,11 +47,26 @@ exports.markdown = function (text) {
   return '<div class="markdown-text">' + myxss.process(md.render(text || '')) + '</div>'
 }
 
+exports.escapeSignature = function (signature) {
+  return signature.split('\n').map(function (p) {
+    return _.escape(p)
+  }).join('<br>')
+}
+
 exports.staticFile = function (filePath) {
   if (filePath.indexOf('http') === 0 || filePath.indexOf('//') === 0) {
     return filePath
   }
   return config.site_static_host + filePath
+}
+
+exports.tabName = function (tab) {
+  var pair = _.find(config.tabs, function (pair) {
+    return pair[0] === tab
+  })
+  if (pair) {
+    return pair[1]
+  }
 }
 
 exports.proxy = function (url) {
@@ -72,4 +76,5 @@ exports.proxy = function (url) {
 }
 
 // 为了在 view 中使用
+exports._ = _
 exports.multiline = multiline

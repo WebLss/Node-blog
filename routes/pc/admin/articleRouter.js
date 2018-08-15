@@ -8,8 +8,10 @@ const Constant = require('../../../common/constant')
 var path = require('path')
 const tagModel = require('../../../models/tagModel')
 const categoryModel = require('../../../models/categoryModel')
+const articleModel = require('../../../models/articleModel')
+const articleTagModel = require('../../../models/articleTagModel')
 var Rs = require('../../../plugin/restful')
-
+var renderHelper = require('../../../common/render_helper')
 var repeat = function (str, num) {
   return new Array(num + 1).join(str)
 }
@@ -30,7 +32,6 @@ var toTreeArray = function (data, html, pid, level) {
       item.parent_id = '0'
     }
     if (item.parent_id == pid) {
-      console.log('==', item.parent_id)
       item.levels = level + 1
       item.html = repeat(html, level)
       temp.push(item)
@@ -45,7 +46,18 @@ var toTreeArray = function (data, html, pid, level) {
 router.get('/', function (req, res, next) {
   res.render(Constant.router('admin', 'article/index'))
 })
-
+router.get('/query', function (req, res, next) {
+  var pageSize = parseInt(req.query.rows || 3)
+  console.log(pageSize)
+  var currentPage = parseInt(req.query.page || 1)
+  articleModel.getArticleList({}, currentPage, pageSize, function (err, result) {
+    if (err) {
+      res.json(err.message)
+    } else {
+      res.json(new Rs(200, '', result))
+    }
+  })
+})
 /**
  * 添加文章页
  */
@@ -67,6 +79,82 @@ router.get('/add', function (req, res, next) {
     } else {
       res.json(new Rs(300, err.message))
     }
+  })
+})
+/**
+ * 编辑文章
+ */
+router.get('/edit', function (req, res, next) {
+  var _id = req.query.id || ''
+  if (_id) {
+    async.parallel({
+      tagList: function (done) {
+        tagModel.getAllData(done).then(function (data) {
+          done('', data)
+        })
+      },
+      cateList: function (done) {
+        categoryModel.getAllData().then(function (data) {
+          done('', toTreeArray(data))
+        })
+      },
+      article: function (done) {
+        articleModel.findById(_id).then(function (data) {
+          done('', data)
+        })
+      },
+      artByTag: function (done) {
+        articleTagModel.findByAid(_id).then(function (data) {
+          done('', data)
+        })
+      }
+    }, function (err, result) {
+      if (!err) {
+        // console.log(result)
+        if (result.artByTag.length > 0) {
+          var tids = []
+          result.artByTag.forEach(function (item) {
+            tids.push(item.tag_id.toString())
+          })
+          console.log(tids)
+          result.artByTag = tids
+        }
+        res.render(Constant.router('admin', 'article/edit'), {result: result})
+      } else {
+        res.json(new Rs(300, err.message))
+      }
+    })
+  }
+})
+
+/**
+ * 处理添加事件
+ */
+router.post('/add', function (req, res, next) {
+  // var hljs = require('highlight.js')
+  var body = req.body
+  /* var md = require('markdown-it')({
+    html: true,
+    linkify: true,
+    highlight: function (str, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return '<pre class="hljs"><code>' +
+            hljs.highlight(lang, str, true).value +
+            '</code></pre>'
+        } catch (__) {}
+      }
+
+      return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
+    }
+  }) */
+  // body.html = md.render(body.markdown)
+  body.html = renderHelper.markdown(body.markdown)
+  console.log(console.log(body))
+  // cid =>category_id
+  articleModel.addArticle(body, function (err, data) {
+    if (err) res.json(new Rs(300, err))
+    else res.json(new Rs(200, '添加文章成功'))
   })
 })
 module.exports = router

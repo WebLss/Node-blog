@@ -6,6 +6,7 @@
     <%- partial('../../common/bootstrapCss') %>
     <%- partial('../../common/icheckCss') %>
     <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=static.__STATIC__%>editor/css/editormd.min.css"/>
 </head>
 <body>
 <div class="container-fluid">
@@ -17,13 +18,13 @@
         </div>
     </div>
     <div class="row margin-top-1 animated fadeIn">
-        <div class="col-md-6 col-md-offset-1">
+        <div class="col-md-10 col-md-offset-1">
             <form id="addCategory" class="form-wrap">
                 <table class="table">
                     <tr>
-                        <th width="80px">所属分类</th>
+                        <th width="7%"><span style="color:red">*</span>&nbsp;所属分类</th>
                         <td>
-                            <select class="form-control modal-sm" name="cid">
+                            <select id="cid" class="form-control modal-sm" name="cid">
 
                                 <option value="0">顶级栏目</option>
                                 <%  result.cateList.forEach(function (item) { %>
@@ -38,15 +39,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>标题</th>
+                        <th><span style="color:red">*</span>&nbsp;标题</th>
                         <td>
-                            <input class="form-control modal-sm" type="text" name="title">
+                            <input id="title" class="form-control modal-sm" type="text" name="title">
                         </td>
                     </tr>
                     <tr>
-                        <th>作者</th>
+                        <th><span style="color:red">*</span>&nbsp;作者</th>
                         <td>
-                            <input class="form-control modal-sm" type="text" name="author" value="">
+                            <input id="author" class="form-control modal-sm" type="text" name="author" value="">
                         </td>
                     </tr>
                     <tr>
@@ -54,7 +55,7 @@
                         <td>
                             <% result.tagList.forEach(function (item) { %>
                                 <span class="inputword"><%=item.name%></span>
-                                <input class="icheck" type="checkbox" name="tids[]" value="<%=item._id%>">
+                                <input class="icheck" type="checkbox" name="tids" value="<%=item._id%>">
                                 &emsp;
                             <% }) %>
                         </td>
@@ -72,9 +73,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>内容</th>
+                        <th><span style="color:red">*</span>&nbsp;内容</th>
                         <td>
-                            <ueditor name="content" />
+                            <div id="test-editormd">
+                                <textarea id="markdown" style="display:none;" name="markdown">
+                                    <%= typeof(content) !== 'undefined' && content || '' %>
+                                </textarea>
+                            </div>
+
                         </td>
                     </tr>
                     <tr>
@@ -121,10 +127,26 @@
 
 <%- partial('../../common/bootstrapJs') %>
 <%- partial('../../common/icheckJs', { color: 'blue' }) %>
+<!-- markdown editor -->
+<script type="text/javascript"  src="<%=static.__STATIC__%>editor/editormd.min.js"></script>
+
 <script>
+  var testEditor;
+
+  $(function() {
+    testEditor = editormd("test-editormd", {
+      width: "100%",
+      height: 640,
+      syncScrolling: "single",
+      path: "/public/static/editor/lib/"
+    });
+  })
+
+
   function sub() {
-   /* $.ajax({
-      url: '/admin/category/add',
+    if(check())
+    $.ajax({
+      url: '/admin/article/add',
       dataType: 'json',
       type: 'post',
       data: $('#addCategory').serialize(),
@@ -137,7 +159,26 @@
       }, error: function (err) {
         layer.msg(err.message, {icon: 2, time: 1500});
       }
-    })*/
+    })
+  }
+  
+  function check() {
+    var msg = ''
+    if (!$('#title').val().trim())  {
+      msg = "文章标题不能为空"
+    } else if (!$('#author').val().trim()) {
+      msg = "作者不能为空"
+    } else if (!$('#cid').val().trim() || $('#cid').val() == '0') {
+      msg = "栏目必须选择"
+    } else if (!$('#markdown').val().trim()) {
+      msg = "内容必须选择"
+    }
+    if(msg) {
+      layer.msg(msg, {icon: 2, time: 1500});
+      return false;
+    } else {
+      return true;
+    }
   }
 </script>
 </body>

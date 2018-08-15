@@ -16,7 +16,8 @@ var Constant = {
     __COMMON_JS__: '/public/dist/common/js/',
     __COMMON_CSS__: '/public/dist/common/css/',
     __COMMON_IMG__: '/public/dist/common/image/',
-    __STATIC_JS__: '/public/static/js/'
+    __STATIC_JS__: '/public/static/js/',
+    __STATIC__: '/public/static/'
   },
   router: function (module,route) { // 路由组装
     return Path.join(envDir, Path.join(module, route))

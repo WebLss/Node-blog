@@ -47,6 +47,11 @@
     </div>
 </div>
 <%- partial('../../common/bootstrapJs') %>
+<script>
+  //加载层
+
+  layer.load(0, { shade: [0.4,'#fff'], time: 500}); //0代表加载的风格，支持0-2
+</script>
 <script type="application/javascript" src="<%=static.__STATIC_JS__%>jqpaginator.min.js"></script>
 <script>
   $('#pagination').jqPaginator({
@@ -70,7 +75,7 @@
            var data = datas.datas
            data.records.forEach(function (item) {
              var trEl = document.createElement('tr');
-             trEl.innerHTML = '<td>'+item._id+ '</td><td>'+item.name+'</td><a href="/admin/tag/edit?id='+item._id+'">编辑</a><td>';
+             trEl.innerHTML = '<td>'+item._id+ '</td><td>'+item.name+'</td><td><a href="/admin/tag/edit?id='+item._id+'">编辑</a><td>';
              fragment.appendChild(trEl);
            })
            $('#showTag').html('');
