@@ -6,12 +6,15 @@ var router = express.Router()
 var async = require('async')
 const Constant = require('../../../common/constant')
 var path = require('path')
+const _ = require('lodash')
 const tagModel = require('../../../models/tagModel')
 const categoryModel = require('../../../models/categoryModel')
 const articleModel = require('../../../models/articleModel')
 const articleTagModel = require('../../../models/articleTagModel')
 var Rs = require('../../../plugin/restful')
 var renderHelper = require('../../../common/render_helper')
+var formidable = require('formidable')
+var fs = require('fs')
 var repeat = function (str, num) {
   return new Array(num + 1).join(str)
 }
@@ -128,11 +131,28 @@ router.get('/edit', function (req, res, next) {
 })
 
 /**
+ * 处理编辑事件
+ */
+router.post('/edit', function (req, res, next) {
+  var body = req.body
+  body.html = renderHelper.markdown(body.markdown)
+  console.log(console.log(body))
+  // cid =>category_id
+  if (!_.isEmpty(body.tids) && (typeof body.tids === 'string')) body.tids = [body.tids]
+  if (!_.isEmpty(body.id)) {
+    articleModel.editArticle(body, function (err, data) {
+      if (err) res.json(new Rs(300, err))
+      else res.json(new Rs(200, data))
+    })
+  }
+})
+
+/**
  * 处理添加事件
  */
 router.post('/add', function (req, res, next) {
   // var hljs = require('highlight.js')
-  var body = req.body
+  // var body = req.body
   /* var md = require('markdown-it')({
     html: true,
     linkify: true,
@@ -149,12 +169,48 @@ router.post('/add', function (req, res, next) {
     }
   }) */
   // body.html = md.render(body.markdown)
-  body.html = renderHelper.markdown(body.markdown)
-  console.log(console.log(body))
+  // body.html = renderHelper.markdown(body.markdown)
+  const form = new formidable.IncomingForm()
+  form.encoding = 'utf-8'
+  form.uploadDir = path.join(process.cwd(), '/public/upload_tmp')
+  var newFileName = (new Date().getTime()) + '.png'
+  var pathss = path.join(process.cwd(), '/public/upload', newFileName)
+  console.log(pathss)
+  form.keepExtensions = true
+  form.parse(req, function (err, field, file) {
+    if (!err) {
+      if (_.isEmpty(file['cover'].name)) {
+        deleteFile(file)
+      } else {
+        field.cover = newFileName
+        field.html = renderHelper.markdown(field.markdown)
+        articleModel.addArticle(field, function (err, data) {
+          if (err) {
+            deleteFile(file)
+            res.json(new Rs(300, err))
+          } else {
+            fs.writeFileSync(pathss, fs.readFileSync(file['cover'].path))
+            deleteFile(file)
+            res.json(new Rs(200, '添加文章成功'))
+          }
+        })
+      }
+    }
+    /* console.log(file['cover']) */
+  }) // 解析request对象
   // cid =>category_id
-  articleModel.addArticle(body, function (err, data) {
+  /* articleModel.addArticle(body, function (err, data) {
     if (err) res.json(new Rs(300, err))
     else res.json(new Rs(200, '添加文章成功'))
-  })
+  }) */
+  var deleteFile = function (file) {
+    fs.unlink(file['cover'].path, function (err) {
+      if (err) {
+        return console.error(err)
+      }
+      console.log('文件删除成功！')
+    })
+  }
+
 })
 module.exports = router

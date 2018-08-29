@@ -7,6 +7,11 @@
     <%- partial('../../common/icheckCss') %>
     <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
     <link rel="stylesheet" type="text/css" href="<%=static.__STATIC__%>editor/css/editormd.min.css"/>
+    <style>
+        #test-editormd {
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -19,7 +24,7 @@
     </div>
     <div class="row margin-top-1 animated fadeIn">
         <div class="col-md-10 col-md-offset-1">
-            <form id="addCategory" class="form-wrap">
+            <form id="addCategory" class="form-wrap" enctype='multipart/form-data'>
                 <table class="table">
                     <tr>
                         <th width="7%"><span style="color:red">*</span>&nbsp;所属分类</th>
@@ -27,9 +32,9 @@
                             <select id="cid" class="form-control modal-sm" name="cid">
 
                                 <option value="0">顶级栏目</option>
-                                <%  result.cateList.forEach(function (item) { %>
+                                <% result.cateList.forEach(function (item) { %>
                                 <option value="<%=item._id%>">
-                                <%=item.html%><%=item.cname%>
+                                    <%=item.html%><%=item.cname%>
                                 </option>
                                 <% }) %>
                                 <!-- <foreach name="data" key="k" item="v">
@@ -54,10 +59,21 @@
                         <th>标签</th>
                         <td>
                             <% result.tagList.forEach(function (item) { %>
-                                <span class="inputword"><%=item.name%></span>
-                                <input class="icheck" type="checkbox" name="tids" value="<%=item._id%>">
-                                &emsp;
+                            <span class="inputword"><%=item.name%></span>
+                            <input class="icheck" type="checkbox" name="tids" value="<%=item._id%>">
+                            &emsp;
                             <% }) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>封面图</th>
+                        <td>
+
+                            <div id="localImag">
+                                <img id="preview" src="<%= proxy(static.__ADMIN_IMG__+'upload.jpg') %>" width="150"
+                                     height="100" style="display: block;">
+                            </div>
+                            <input type="file" name="cover" id="doc" style="width:150px;" onchange="setImagePreview()">
                         </td>
                     </tr>
                     <tr>
@@ -69,16 +85,15 @@
                     <tr>
                         <th>描述</th>
                         <td>
-                            <textarea class="form-control modal-sm" name="description" rows="7" placeholder="可以不填，如不填；则截取文章内容前300字为描述"></textarea>
+                            <textarea class="form-control modal-sm" name="description" rows="7"
+                                      placeholder="可以不填，如不填；则截取文章内容前300字为描述"></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th><span style="color:red">*</span>&nbsp;内容</th>
                         <td>
                             <div id="test-editormd">
-                                <textarea id="markdown" style="display:none;" name="markdown">
-                                    <%= typeof(content) !== 'undefined' && content || '' %>
-                                </textarea>
+                                <textarea id="markdown" style="display:none;" name="markdown"></textarea>
                             </div>
 
                         </td>
@@ -128,56 +143,96 @@
 <%- partial('../../common/bootstrapJs') %>
 <%- partial('../../common/icheckJs', { color: 'blue' }) %>
 <!-- markdown editor -->
-<script type="text/javascript"  src="<%=static.__STATIC__%>editor/editormd.min.js"></script>
-
+<script type="text/javascript" src="<%=static.__STATIC__%>editor/editormd.min.js"></script>
 <script>
-  var testEditor;
+  var testEditor
 
-  $(function() {
-    testEditor = editormd("test-editormd", {
-      width: "100%",
-      height: 640,
-      syncScrolling: "single",
-      path: "/public/static/editor/lib/"
-    });
+  $(function () {
+    editormd.urls.atLinkBase = 'https://github.com/'
+    testEditor = editormd('test-editormd', {
+      width: '100%',
+      height: 620,
+      toc: true,
+      //atLink    : false,    // disable @link
+      //emailLink : false,    // disable email address auto link
+      todoList: true,
+      placeholder: '输入文章内容',
+      toolbarAutoFixed: false,
+      path: '/public/static/editor/lib/',
+      emoji: true
+    })
   })
 
 
   function sub() {
-    if(check())
-    $.ajax({
-      url: '/admin/article/add',
-      dataType: 'json',
-      type: 'post',
-      data: $('#addCategory').serialize(),
-      success: function (result) {
-        if(result.code === 200) {
-          layer.msg(result.message, {icon: 1, time: 1500});
-        } else {
-          layer.msg(result.message, {icon: 2, time: 1500});
+    if (check())
+      $.ajax({
+        url: '/admin/article/add',
+        dataType: 'json',
+        type: 'post',
+        processData: false,
+        contentType: false,// 当有文件要上传时，此项是必须的，否则后台无法识别文件流的起始位置
+        data: new FormData($('#addCategory')[0]),
+        success: function (result) {
+          if (result.code === 200) {
+            layer.msg(result.message, {icon: 1, time: 1500})
+          } else {
+            layer.msg(result.message, {icon: 2, time: 1500})
+          }
+        }, error: function (err) {
+          layer.msg(err.message, {icon: 2, time: 1500})
         }
-      }, error: function (err) {
-        layer.msg(err.message, {icon: 2, time: 1500});
-      }
-    })
+      })
   }
-  
+
+  function setImagePreview(avalue) {
+    var docObj = document.getElementById('doc')
+    var imgObjPreview = document.getElementById('preview')
+    if (docObj.files && docObj.files[0]) {
+      //火狐下，直接设img属性
+      imgObjPreview.style.display = 'block'
+      imgObjPreview.style.width = '160px'
+      imgObjPreview.style.height = '100px'
+      //imgObjPreview.src = docObj.files[0].getAsDataURL();
+      //火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+      imgObjPreview.src = window.URL.createObjectURL(docObj.files[0])
+    }
+    else {
+      //IE下，使用滤镜
+      docObj.select()
+      var imgSrc = document.selection.createRange().text
+      var localImagId = document.getElementById('localImag') //必须设置初始大小
+      localImagId.style.width = '150px'
+      localImagId.style.height = '100px' //图片异常的捕捉，防止用户修改后缀来伪造图片
+      try {
+        localImagId.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)'
+        localImagId.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = imgSrc
+      } catch (e) {
+        alert('您上传的图片格式不正确，请重新选择!')
+        return false
+      }
+      imgObjPreview.style.display = 'none'
+      document.selection.empty()
+    }
+    return true
+  }
+
   function check() {
     var msg = ''
-    if (!$('#title').val().trim())  {
-      msg = "文章标题不能为空"
+    if (!$('#title').val().trim()) {
+      msg = '文章标题不能为空'
     } else if (!$('#author').val().trim()) {
-      msg = "作者不能为空"
+      msg = '作者不能为空'
     } else if (!$('#cid').val().trim() || $('#cid').val() == '0') {
-      msg = "栏目必须选择"
+      msg = '栏目必须选择'
     } else if (!$('#markdown').val().trim()) {
-      msg = "内容必须选择"
+      msg = '内容必须选择'
     }
-    if(msg) {
-      layer.msg(msg, {icon: 2, time: 1500});
-      return false;
+    if (msg) {
+      layer.msg(msg, {icon: 2, time: 1500})
+      return false
     } else {
-      return true;
+      return true
     }
   }
 </script>

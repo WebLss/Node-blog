@@ -23,6 +23,9 @@ var ArticleTagModel = {
     }
     return true
   },
+  deleteData: function (aid, callback) {
+    ArticleTagDb.deleteMany({ _id: aid }, callback)
+  },
   /**
    * 根据文章id查询
    * @param aid

@@ -40,6 +40,43 @@ var ArticleModel = {
     })
   },
   /**
+   * 编辑文章列表
+   * @param obj
+   * @param callback
+   */
+  editArticle: function (obj, callback) {
+    ArticleDb.findOne({title: obj.title, _id: {$nin: [obj.id]}}).exec()
+      .then(function (result) {
+
+        if (result) {
+          var msg = '文章标题名称已存在'
+          callback(msg, null)
+        } else {
+          var tids = obj.tids || []
+          var categoryId = obj.cid
+          var id = obj.id
+          delete obj.tids
+          delete obj.cid
+          delete obj.id
+          obj.category_id = categoryId
+          ArticleDb.updateOne({_id: id}, {$set: obj}).exec(function (err, success) {
+            if (!err) {
+              articleTagModel.deleteData(id, function (err, writeO) {
+                if (!err && (tids !== [])) {
+                  articleTagModel.addData(id, tids)
+                }
+              })
+              callback(null, '保存文章成功')
+            } else {
+              callback(err.message, null)
+            }
+          })
+        }
+      }, function (err) {
+        callback(err.message, null)
+      })
+  },
+  /**
    * 查询文章分页列表
    */
   getArticleList: function (option, currentPage, pageSize, callback) {
