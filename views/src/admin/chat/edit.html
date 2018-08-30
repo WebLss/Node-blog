@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加碎言</title>
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
+</head>
+<body>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="tag">
+                <b>碎言管理</b> / 添加碎言
+            </span>
+        </div>
+    </div>
+    <div class="row margin-top-2">
+        <div class="col-md-12">
+            <span class="tag">
+                <a href="javascript:history.go(-1)">返回</a>
+            </span>
+        </div>
+    </div>
+    <% if(typeof(message) !== 'undefined') { %>
+       <%- partial('../message/message', { message: message }) %>
+    <% } %>
+    <div class="row margin-top-1">
+        <div class="col-md-4 col-md-offset-1">
+            <form id="editChat"class="form-wrap">
+                <fieldset>
+
+                    <label class="margin-top-1" contenteditable="true">内容</label>
+                    <textarea class="form-control modal-sm" name="content" rows="7"><%=content%></textarea>
+                    <label class="help-block" contenteditable="true">是否显示</label>
+                    <span class="inputword">是</span>
+                    <input id="test" class="icheck" type="radio" name="is_show" value="1" <% if(is_show){ %>checked="checked"<%}%>>
+                    &emsp;
+                    <span class="inputword">否</span>
+                    <input class="icheck" type="radio" name="is_show" value="0" <% if(!is_show){ %>checked="checked"<%}%>><br>
+                    <input type="hidden" value="<%=_id%>" name="id">
+                    <button  type="button" class="btn lss-btn-primary margin-top-1" onclick="sub()" >确认修改</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- partial('../../common/bootstrapJs') %>
+<script>
+  function sub() {
+    $.ajax({
+      url: '/admin/chat/edit',
+      dataType: 'json',
+      type: 'post',
+      data: $('#editChat').serialize(),
+      success: function (result) {
+        if(result.code === 200) {
+          layer.msg(result.message, {icon: 1, time: 1500});
+        } else {
+          layer.msg(result.message, {icon: 2, time: 1500});
+        }
+      }, error: function (err) {
+        layer.msg(err.message, {icon: 2, time: 1500});
+      }
+    })
+  }
+</script>
+</body>
+</html>

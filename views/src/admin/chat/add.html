@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加碎言</title>
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
+</head>
+<body>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="tag">
+                <b>碎言管理</b> / 添加碎言
+            </span>
+        </div>
+    </div>
+    <% if(typeof(message) !== 'undefined') { %>
+       <%- partial('../message/message', { message: message }) %>
+    <% } %>
+    <div class="row margin-top-1">
+        <div class="col-md-4 col-md-offset-1">
+            <form action="/admin/chat/add" method="post" class="form-wrap">
+                <fieldset>
+
+                    <label class="margin-top-1" contenteditable="true">内容</label>
+                    <textarea class="form-control modal-sm" name="content" rows="7"></textarea>
+                    <label class="help-block" contenteditable="true">是否显示</label>
+                    <span class="inputword">是</span>
+                    <input id="test" class="icheck" type="radio" name="is_show" value="1" checked="checked">
+                    &emsp;
+                    <span class="inputword">否</span>
+                    <input class="icheck" type="radio" name="is_show" value="0"><br>
+                    <button  class="btn lss-btn-primary margin-top-1" contenteditable="true" type="submit">确认添加</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- partial('../../common/bootstrapJs') %>
+</body>
+</html>

@@ -10,3 +10,4 @@ journal/
 /package-lock.json
 /views/dist/
 /public/dist/
+/common/webConfig.js

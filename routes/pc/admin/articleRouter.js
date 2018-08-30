@@ -50,10 +50,10 @@ router.get('/', function (req, res, next) {
   res.render(Constant.router('admin', 'article/index'))
 })
 router.get('/query', function (req, res, next) {
-  var pageSize = parseInt(req.query.rows || 3)
+  var pageSize = parseInt(req.query.rows || 8)
   console.log(pageSize)
   var currentPage = parseInt(req.query.page || 1)
-  articleModel.getArticleList({}, currentPage, pageSize, function (err, result) {
+  articleModel.getArticleList({is_delete: false}, currentPage, pageSize, function (err, result) {
     if (err) {
       res.json(err.message)
     } else {
@@ -129,7 +129,16 @@ router.get('/edit', function (req, res, next) {
     })
   }
 })
-
+router.get('/delete', function (req, res, next) {
+  var _id = req.query.id || ''
+  if (_id) {
+    articleModel.removeArticle(_id, true).then(function (success) {
+      res.redirect('/admin/article')
+    }, function (err) {
+      res.json(new Rs(300, err.message))
+    })
+  }
+})
 /**
  * 处理编辑事件
  */
@@ -151,25 +160,6 @@ router.post('/edit', function (req, res, next) {
  * 处理添加事件
  */
 router.post('/add', function (req, res, next) {
-  // var hljs = require('highlight.js')
-  // var body = req.body
-  /* var md = require('markdown-it')({
-    html: true,
-    linkify: true,
-    highlight: function (str, lang) {
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          return '<pre class="hljs"><code>' +
-            hljs.highlight(lang, str, true).value +
-            '</code></pre>'
-        } catch (__) {}
-      }
-
-      return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
-    }
-  }) */
-  // body.html = md.render(body.markdown)
-  // body.html = renderHelper.markdown(body.markdown)
   const form = new formidable.IncomingForm()
   form.encoding = 'utf-8'
   form.uploadDir = path.join(process.cwd(), '/public/upload_tmp')
@@ -203,14 +193,14 @@ router.post('/add', function (req, res, next) {
     if (err) res.json(new Rs(300, err))
     else res.json(new Rs(200, '添加文章成功'))
   }) */
-  var deleteFile = function (file) {
-    fs.unlink(file['cover'].path, function (err) {
-      if (err) {
-        return console.error(err)
-      }
-      console.log('文件删除成功！')
-    })
-  }
-
 })
+
+var deleteFile = function (file) {
+  fs.unlink(file['cover'].path, function (err) {
+    if (err) {
+      return console.error(err)
+    }
+    console.log('文件删除成功！')
+  })
+}
 module.exports = router

@@ -86,7 +86,7 @@ var ArticleModel = {
         ArticleDb.countDocuments(option, done)
       },
       records: function (done) { // 查询一页的记录
-        ArticleDb.find(option).limit(pageSize).skip(start || 0)
+        ArticleDb.find(option).limit(pageSize).skip(start || 0).sort({'_id': -1})
           .exec(done)
       }
     }, function (err, results) {
@@ -96,6 +96,13 @@ var ArticleModel = {
   },
   findById: function (objectId) {
     return ArticleDb.findById(objectId).exec()
+  },
+  /**
+   * 将文章在回收站到列表间移动
+   * @status : boolean
+   */
+  removeArticle: function (objectId, status) {
+    return ArticleDb.updateOne({_id: objectId}, {$set: {is_delete: status}}).exec()
   }
 
 }
