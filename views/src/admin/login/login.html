@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <%- partial('../../common/bootstrapCss') %>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>common.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=static.__ADMIN_CSS__%>login.css"/>
+</head>
+<body>
+   <div class="row">
+       <div class="col-md-4 col-md-offset-4" style="height: 400px">
+           <form id="login-form" class="form-wrap">
+               <div id="Login">
+                   <label class="margin-top-1">密码</label>
+                   <input class="form-control modal-sm " type="password" name="ADMIN_PASSWORD">
+                   <label class="margin-top-1">验证码</label>
+                   <input class="form-control modal-sm " type="text" placeholder="验证码" autocomplete="off"  name="verify">
+                   <img id="verify" class="verify margin-top-1" src="/admin/login/showVerify" title="点击更换"  onclick="setVerify()">
+                   <button class="btn lss-btn-primary margin-top-1 submit" type="button" onclick="sub()">登录</button>
+               </div>
+           </form>
+       </div>
+   </div>
+<%- partial('../../common/bootstrapJs') %>
+<script>
+  function sub() {
+    if(check()) {
+      $.ajax({
+        url: '/admin/login',
+        dataType: 'json',
+        type: 'post',
+        data: $('#login-form').serialize(),
+        success: function (result) {
+          setVerify()
+          if (result.code === 200) {
+            window.location.href = "/admin"
+          } else {
+            layer.msg(result.message, {icon: 2, time: 1500});
+          }
+        }, error: function (err) {
+          setVerify()
+          layer.msg(err.message, {icon: 2, time: 1500});
+        }
+      })
+    } else {
+      layer.msg('密码或验证码不能为空', {icon: 2, time: 1500});
+    }
+  }
+  function check() {
+    if ($("input[name='ADMIN_PASSWORD']").val().trim() && $("input[name='verify']").val().trim()){
+      return true
+    }
+    return false
+  }
+  function setVerify(){
+    $('#verify').attr('src','/admin/login/showVerify?rand='+Math.random());
+  }
+</script>
+</body>
+</html>

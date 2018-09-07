@@ -171,6 +171,5 @@ $ ./node_modules/loader-builder/bin/builder <views_dir> <output_dir>
 如以上的assets/index.min.js文件并不一定需要真正存在，进行扫描构建后，会将相关的js文件进行编译和合并为一个文件。
 并且根据文件内容进行md5取hash值，最终生成/assets/index.min.ecf8427e.js这样的文件。
 
+http://www.ptbird.cn/node-js-svg-captcha.html
 
-
-密码veeker  li152783?

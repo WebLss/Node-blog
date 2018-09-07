@@ -12,7 +12,7 @@
 
     <div class="row margin-top-1 animated fadeIn">
         <div class="col-md-10 col-md-offset-1">
-            <form action="/admin/config" method="post" class="form-wrap">
+            <form id="editConfig" action="/admin/config" method="post" class="form-wrap">
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a href="#basic" data-toggle="tab">网站设置</a>
@@ -69,7 +69,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="seo">
-                        <table class="table table-bordered table-hover">
+                        <table class="table  table-hover">
                             <tr>
                                 <th>网站名：</th>
                                 <td>
@@ -109,7 +109,7 @@
                         </table>
                     </div>
                    <!-- <div class="tab-pane fade" id="water">
-                        <table class="table table-bordered table-hover">
+                        <table class="table  table-hover">
                             <tr>
                                 <th>水印类型：</th>
                                 <td>
@@ -216,7 +216,7 @@
                         </table>
                     </div>-->
                     <div class="tab-pane fade" id="oauth">
-                        <table class="table table-bordered table-hover">
+                        <table class="table  table-hover">
                             <tr>
                                 <th>QQ登录APP ID：</th>
                                 <td>
@@ -304,7 +304,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="other">
-                        <table class="table table-bordered table-hover">
+                        <table class="table  table-hover">
                             <tr>
                                 <th>百度推送site提交链接：</th>
                                 <td>
@@ -320,7 +320,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="email">
-                        <table class="table table-bordered table-hover">
+                        <table class="table  table-hover">
                             <tr>
                                 <th>SMTP服务器：</th>
                                 <td>
@@ -348,7 +348,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="comment">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-hover">
                             <tr>
                                 <th>开启评论审核：</th>
                                 <td>
@@ -364,7 +364,7 @@
                                     <span class="inputword">开启</span>
                                     <input class="icheck" type="radio" name="COMMENT_SEND_EMAIL" value="1" <%if(COMMENT_SEND_EMAIL == 1) { %>checked="checked"<%}%>>
                                     <span class="inputword">关闭</span>
-                                    <input class="icheck" type="radio" name="COMMENT_SEND_EMAIL" value="0" <%if(COMMENT_SEND_EMAIL == 1) { %>checked="checked"<%}%>>
+                                    <input class="icheck" type="radio" name="COMMENT_SEND_EMAIL" value="0" <%if(COMMENT_SEND_EMAIL == 0) { %>checked="checked"<%}%>>
                                 </td>
                             </tr>
                             <tr>
@@ -377,7 +377,7 @@
                     </div>
                 </div>
                 <div>
-                    <input class="btn lss-btn-primary" type="submit" value="提交">
+                    <button class="btn lss-btn-primary" type="button" onclick="sub()">保存</button>
                 </div>
             </form>
         </div>
@@ -388,7 +388,23 @@
 <%- partial('../../common/icheckJs', { color: 'blue' }) %>
 <!-- markdown editor -->
 <script>
-
+  function sub() {
+    $.ajax({
+      url: '/admin/config',
+      dataType: 'json',
+      type: 'post',
+      data: $('#editConfig').serialize(),
+      success: function (result) {
+        if(result.code === 200) {
+          layer.msg(result.message, {icon: 1, time: 1500});
+        } else {
+          layer.msg(result.message, {icon: 2, time: 1500});
+        }
+      }, error: function (err) {
+        layer.msg(err.message, {icon: 2, time: 1500});
+      }
+    })
+  }
 </script>
 </body>
 </html>

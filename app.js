@@ -8,7 +8,9 @@ var _ = require('lodash')
 var config = require('./config/default')
 var Constant = require('./common/constant')
 var proxyMiddleware = require('./middlewares/proxy')
-
+var session = require('express-session')
+var RedisStore = require('connect-redis')(session)
+var auth = require('./middlewares/auth');
 var app = express()
 // 设置正式环境和开发环境
 console.log(process.env.NODE_ENV)
@@ -28,6 +30,18 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 // if (process.env.NODE_ENV === 'development') { }
 app.use('/agent', proxyMiddleware.proxy) // 拦截图片被盗用，设置代理refer
 
+app.use(session({
+  secret: config.session_secret,
+  store: new RedisStore({
+    port: config.redis_port,
+    host: config.redis_host,
+    db: config.redis_db,
+    pass: config.redis_password
+  }),
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(auth.authUser)
 // assets
 var assets = {}
 if (config.mini_assets) {

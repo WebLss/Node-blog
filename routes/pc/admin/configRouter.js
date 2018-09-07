@@ -1,14 +1,23 @@
 const express = require('express')
 const Constant = require('../../../common/constant')
-const webconfig = require('../../../common/webConfig')
 const tools = require('../../../common/tools')
 const router = express.Router()
 var fs = require('fs')
+const Rs = require('../../../plugin/restful')
 /**
  * 标签列表
  */
 router.get('/', function (req, res, next) {
-  res.render(Constant.router('admin', 'config/index'), webconfig)
+  console.log('读取写入的数据！')
+  fs.readFile('common/webConfig.txt', function (err, data) {
+    if (err) {
+      res.render(Constant.router('admin', 'config/index'), Constant.webConfig)
+      return console.error(err)
+    }
+    console.log('异步读取文件数据: ')
+    const obj = JSON.parse(data.toString())
+    res.render(Constant.router('admin', 'config/index'), obj)
+  })
 })
 router.post('/', function (req, res, next) {
   var webConfigDefault = Constant.webConfig
@@ -18,19 +27,15 @@ router.post('/', function (req, res, next) {
     }
   }
   console.log('准备写入文件')
-  fs.writeFile('common/webConfig.js', 'module.exports =' + JSON.stringify(webConfigDefault), function (err) {
+  fs.writeFile('common/webConfig.txt', JSON.stringify(webConfigDefault), function (err) {
     if (err) {
-      return console.error(err)
+      console.error(err)
+      res.json(new Rs(300, '保存失败'))
+      return
     }
+    res.json(new Rs(200, '保存成功'))
     console.log('数据写入成功！')
     console.log('--------我是分割线-------------')
-    console.log('读取写入的数据！')
-    /* fs.readFile('input.txt', function (err, data) {
-      if (err) {
-        return console.error(err)
-      }
-      console.log('异步读取文件数据: ' + data.toString())
-    }) */
   })
 })
 module.exports = router
